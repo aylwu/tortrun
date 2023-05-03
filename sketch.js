@@ -4,7 +4,7 @@
  */
 let rectWidth;
 let x, y, ox, oy;
-let speed=1;
+let pixel=1;
 let statsBar;
 let direction='STOP';
 let prevDirection;
@@ -13,9 +13,12 @@ let framesPerSec=50;
 let startTime, stopTime, deltaTime;
 let velocity;
 let acceleration;
+let tort;
+
+this.focus();
 
 function setup() {
-  speed=1;
+  pixel=1;
   direction='STOP';
   distance=0;
   framesPerSec=50;
@@ -28,22 +31,30 @@ function setup() {
   let canvas=createCanvas(720, 400);
   ox=x=(width-200)/2+200, oy=y=height/2;
   noStroke();
-  background(230);
+  background(189);
   rectWidth = width / 4;
-  circle(x, y, 20);
+  // circle(x, y, 20);
+  tort = loadImage('darealtort.png');
 }
 
+// keep draw() here to continue looping while waiting for keys
 function draw() {
-  statsBar.background(4444);
-  // keep draw() here to continue looping while waiting for keys
+  statsBar.background(888);
   moveTort(direction);
-  circle(x, y, 20);
+  // circle(x, y, 10);
+  image(tort,x, y);
+  stroke(69);
   displayStats();
 }
 
 function displayStats() {
-  
   let texty=10;
+
+  statsBar.text('[ENTER] start over', 10, texty, 280, 80);
+  texty=texty+20;
+  statsBar.text('[SPACE] stop', 10, texty, 280, 80);
+  
+  texty=texty+20;
   let spos = 'starting position: ('+ox+','+oy+')';
   statsBar.fill(50);
   statsBar.text(spos, 10, texty, 280, 80);
@@ -95,32 +106,32 @@ function moveTort(direction) {
   switch(direction) {
     case 'N':
       if (y>0) {
-        y=y-speed;
-        distance=distance+speed;
+        y=y-pixel;
+        distance=distance+pixel;
       }
       else
         stopTort();
       break;
     case 'S':
       if (y<400) {
-        y=y+speed;
-        distance=distance+speed;
+        y=y+pixel;
+        distance=distance+pixel;
       }
       else
         stopTort();
       break;
     case 'E':
       if (x<720) {
-        x=x+speed;
-        distance=distance+speed;
+        x=x+pixel;
+        distance=distance+pixel;
       }
       else
         stopTort();
       break;
     case 'W':
       if (x>200) {
-        x=x-speed;
-        distance=distance+speed;
+        x=x-pixel;
+        distance=distance+pixel;
       }
       else
         stopTort();
@@ -129,11 +140,13 @@ function moveTort(direction) {
 }
 
 function stopTort() {
-  stopTime=Date.now();
-  deltaTime=stopTime-startTime;
-  direction='STOP';
-  line(ox, oy, x, y);
-  // stroke(69);
+  if (direction!='STOP') {
+    stopTime=Date.now();
+    deltaTime=stopTime-startTime;
+    direction='STOP';
+    line(ox, oy, x, y);
+    stroke(69);    
+  }
 }
 
 function keyPressed() {
@@ -152,21 +165,7 @@ function keyPressed() {
       direction='W';
       break;
     case ' ':
-      if (stopTime==undefined) {
-        stopTort();
-      }
-      // if (direction!='STOP') {
-      //   prevDirection=direction;
-      //   direction='STOP';
-      //   stopTime=Date.now();
-      //   deltaTime=stopTime-startTime;
-      //   print(startTime);
-      //   print(stopTime);
-      // }
-      // else {
-      //   direction=prevDirection;
-      //   startTime=Date.now();
-      // }
+      stopTort();
       break;
     case 'Enter':
       setup();
