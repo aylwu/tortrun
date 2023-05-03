@@ -11,4 +11,3 @@ Press the "right" arrow key to move right.
 Press the "left" arrow key to move left.
 Press the spacebar to stop the game, and show the displacement of the tortoise.
 Press the enter key to reset the game.
-(describe each key's function)
